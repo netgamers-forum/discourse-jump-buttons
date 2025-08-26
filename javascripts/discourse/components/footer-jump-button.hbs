@@ -1,0 +1,10 @@
+<button
+  class="btn btn-icon-text btn-default topic-footer-button discourse-jump-button"
+  title="{{theme-setting 'jump_button_title'}}"
+  aria-label="{{theme-setting 'jump_button_label'}}"
+  type="button"
+  {{on "click" this.jumpTop}}
+>
+  {{d-icon "arrow-up"}}
+  <span class="d-button-label">{{theme-setting 'jump_button_label'}}</span>
+</button>
