@@ -36,6 +36,7 @@ export default {
       }
 
       if (settings.jump_button_enabled) {
+		console.log("Registrazione pulsante footer avviata");
         api.registerTopicFooterButton({
           id: "discourse-jump-button",
           icon: "arrow-up",
@@ -53,6 +54,9 @@ export default {
           classNames: ["discourse-jump-button"],
         });
       }
+	  
+	  
+	  
     });
   }
 };
