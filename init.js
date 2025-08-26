@@ -1,4 +1,7 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
+import { getOwner } from "@ember/application";
+import settings from "discourse/lib/theme-settings";
+import hbs from "htmlbars-inline-precompile";
 
 function createFakeEvent() {
   return {
@@ -15,9 +18,13 @@ function createFakeEvent() {
 export default {
   name: "discourse-jump-buttons",
 
-  initialize(container) {
+  initialize() {
+    console.log("settings:", settings);
+
     withPluginApi("1.20.0", (api) => {
+      // Desktop buttons in timeline
       if (settings.timeline_buttons_enabled) {
+        console.log("Montaggio pulsanti desktop nella timeline");
         api.decoratePluginOutlet("topic-above-post-stream", () => {
           return [
             hbs`<JumpUpButton />`,
@@ -26,7 +33,9 @@ export default {
         });
       }
 
+      // Mobile buttons in nav
       if (settings.mobile_buttons_enabled) {
+        console.log("Montaggio pulsanti mobile nella nav");
         api.decoratePluginOutlet("mobile-nav", () => {
           return [
             hbs`<MobileJumpUpButton />`,
@@ -35,28 +44,27 @@ export default {
         });
       }
 
+      // Footer button
       if (settings.jump_button_enabled) {
-		console.log("Registrazione pulsante footer avviata");
+        console.log("Registrazione pulsante footer avviata");
+
         api.registerTopicFooterButton({
           id: "discourse-jump-button",
           icon: "arrow-up",
           priority: 0,
           translatedLabel() {
-            return settings.jump_button_label;
+            return settings.jump_button_label || "Jump";
           },
           translatedTitle() {
-            return settings.jump_button_title;
+            return settings.jump_button_title || "Jump to top";
           },
           action() {
-            const topicController = container.lookup("controller:topic");
+            const topicController = getOwner(this).lookup("controller:topic");
             topicController?.send("jumpTop", createFakeEvent());
           },
           classNames: ["discourse-jump-button"],
         });
       }
-	  
-	  
-	  
     });
   }
 };
